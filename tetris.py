@@ -18,10 +18,11 @@ class Tetris:
     def __init__(self):
         self.tetris_board_properties = TetrisBoard()
         self.move_figure = TetrisMoveFigures(self.tetris_board_properties)
-        self.position = [0, int(self.tetris_board_properties.board_width / 2) - 1]
-        self.random_figure = random.choice(TetrisFigures().__call__())
+        self.position: list = [0, int(self.tetris_board_properties.board_width / 2) - 1]
+        self.random_figure: np.array = random.choice(TetrisFigures().__call__())
         self.full_lines: list = []
-        self.q = Queue()
+        self.pressed_key_dict: dict = {65: 'a', 97: 'A', 68: 'd', 100: 'D', 83: 's', 115: 'S', 87: 'w', 119: 'W'}
+        self.q: Queue = Queue()
         self.exit_game: bool = False
 
     def __call__(self):
@@ -101,17 +102,16 @@ class Tetris:
         """When the user presses one of the figure control keys, this method will select the appropriate function"""
         refreshed_tetris_objects = kwargs['refreshed_tetris_objects']
         pressed_key = kwargs['pressed_key']
-        pressed_key_dict = {65: 'a', 97: 'A', 68: 'd', 100: 'D', 83: 's', 115: 'S', 87: 'w', 119: 'W'}
-        if pressed_key_dict.get(pressed_key) == 'a' or pressed_key_dict.get(pressed_key) == 'A':
+        if self.pressed_key_dict.get(pressed_key) == 'a' or self.pressed_key_dict.get(pressed_key) == 'A':
             if self.move_figure.left(refreshed_tetris_objects):
                 refreshed_tetris_objects.position[1] -= 1
-        elif pressed_key_dict.get(pressed_key) == 'd' or pressed_key_dict.get(pressed_key) == 'D':
+        elif self.pressed_key_dict.get(pressed_key) == 'd' or self.pressed_key_dict.get(pressed_key) == 'D':
             if self.move_figure.right(refreshed_tetris_objects):
                 refreshed_tetris_objects.position[1] += 1
-        elif pressed_key_dict.get(pressed_key) == 's' or pressed_key_dict.get(pressed_key) == 'S':
+        elif self.pressed_key_dict.get(pressed_key) == 's' or self.pressed_key_dict.get(pressed_key) == 'S':
             if self.move_figure.down(refreshed_tetris_objects):
                 refreshed_tetris_objects.random_figure = np.rot90(refreshed_tetris_objects.random_figure, -1)
-        elif pressed_key_dict.get(pressed_key) == 'w' or pressed_key_dict.get(pressed_key) == 'W':
+        elif self.pressed_key_dict.get(pressed_key) == 'w' or self.pressed_key_dict.get(pressed_key) == 'W':
             if self.move_figure.up(refreshed_tetris_objects):
                 refreshed_tetris_objects.random_figure = np.rot90(refreshed_tetris_objects.random_figure)
 
