@@ -50,7 +50,7 @@ class Tetris:
             if pressed_key == 27 or pressed_key == 81 or pressed_key == 113:
                 self.exit_game = True
                 break
-            self.detecting_pressed_key(refreshed_tetris_objects=refreshed_tetris_objects, pressed_key=pressed_key, last_position_of_the_playing_field=last_position_of_the_playing_field)
+            self.call_correct_method_for_figure_movement(refreshed_tetris_objects=refreshed_tetris_objects, pressed_key=pressed_key, last_position_of_the_playing_field=last_position_of_the_playing_field)
 
             if not self.q.empty():
                 self.q.get()
@@ -81,6 +81,7 @@ class Tetris:
             tetris_main_window.clrtoeol()
 
     def draw_points_and_figures(self, refreshed_tetris_objects, tetris_main_window):
+        """Drawing points and shape on the board"""
         self.tetris_board_properties.overlay_of_play_field[refreshed_tetris_objects.position[0]:refreshed_tetris_objects.position[0] + refreshed_tetris_objects.random_figure.shape[0],
         refreshed_tetris_objects.position[1]:refreshed_tetris_objects.position[1] + refreshed_tetris_objects.random_figure.shape[1]] = refreshed_tetris_objects.random_figure
         for i in range(0, self.tetris_board_properties.board_depth):
@@ -96,7 +97,8 @@ class Tetris:
             tetris_main_window.addstr(self.tetris_board_properties.board_depth + self.tetris_board_properties.top_padding, self.tetris_board_properties.left_padding, ("*" * (self.tetris_board_properties.board_width + 2)))
         tetris_main_window.refresh()
 
-    def detecting_pressed_key(self, **kwargs):
+    def call_correct_method_for_figure_movement(self, **kwargs):
+        """When the user presses one of the figure control keys, this method will select the appropriate function"""
         refreshed_tetris_objects = kwargs['refreshed_tetris_objects']
         pressed_key = kwargs['pressed_key']
         pressed_key_dict = {65: 'a', 97: 'A', 68: 'd', 100: 'D', 83: 's', 115: 'S', 87: 'w', 119: 'W'}
@@ -119,7 +121,7 @@ class Tetris:
         tetris_main_window.clrtoeol()
 
     def falling_objects(self, q: Queue):
-        """The method responsible for falling objects"""
+        """The method responsible for falling shapes"""
         while True:
             if self.exit_game:
                 self.say_goodbye()
