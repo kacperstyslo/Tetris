@@ -7,7 +7,7 @@ class TetrisFigures:
     def __init__(self):
         self.figures: list = []
 
-    def __call__(self):
+    def __call__(self) -> list:
         return list(self.tetris_figure_factory())
 
     def tetris_figure_factory(self) -> list:

@@ -5,7 +5,8 @@ Simple implementation of a tetris game. The game runs in windows console(cmd) or
 
 ## Requirements
 * Python 3+<br/>
-* All packages beyond the standard python library are in requirements.txt<br/><br/>
+* All packages beyond the standard python library are in requirements.txt<br/>
+* Windows (working only on windows)<br/><br/>
 If you want to install missing packages yourself just type	↓
 ```shell script
 pip install windows-curses && pip install numpy
