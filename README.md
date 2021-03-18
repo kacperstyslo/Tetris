@@ -22,6 +22,10 @@ python tetris.py
 - Rotate figure clockwise press **S**
 - Exit game press **ESC** or **Q**
 
+## Game View
+![game](https://user-images.githubusercontent.com/57534862/111609345-7cb83780-87da-11eb-8340-d5c7c40f052d.gif)
+
+
 
 
 
