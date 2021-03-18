@@ -20,6 +20,7 @@ class Tetris:
         self.move_figure = TetrisMoveFigures(self.tetris_board_properties)
         self.position = [0, int(self.tetris_board_properties.board_width / 2) - 1]
         self.random_figure = random.choice(TetrisFigures().__call__())
+        self.full_lines: list = []
         self.q = Queue()
         self.exit_game: bool = False
 
@@ -40,31 +41,10 @@ class Tetris:
         falling_objects_thread.start()
 
         while True:
-            self.tetris_board_properties.overlay_of_play_field[refreshed_tetris_objects.position[0]:refreshed_tetris_objects.position[0] + refreshed_tetris_objects.random_figure.shape[0],
-            refreshed_tetris_objects.position[1]:refreshed_tetris_objects.position[1] + refreshed_tetris_objects.random_figure.shape[1]] = refreshed_tetris_objects.random_figure
-            full_lines = []
-            for i in range(0, self.tetris_board_properties.board_depth):
-                if np.count_nonzero(self.tetris_board_properties.play_field[i]) == self.tetris_board_properties.board_width:
-                    tetris_main_window.addstr(i + self.tetris_board_properties.top_padding, self.tetris_board_properties.left_padding - 3, ">>>>|" + ("*" * self.tetris_board_properties.board_width) + "|<<<<")
-                    full_lines.append(i)
-                else:
-                    tetris_main_window.addch(i + self.tetris_board_properties.top_padding, self.tetris_board_properties.left_padding, ord("*"))
-                    for j in range(0, self.tetris_board_properties.board_width):
-                        tetris_main_window.addch(i + self.tetris_board_properties.top_padding, self.tetris_board_properties.left_padding + 1 + j,
-                                                 ord('*') if self.tetris_board_properties.play_field[i, j] + self.tetris_board_properties.overlay_of_play_field[i, j] else ord(" "))
-                    tetris_main_window.addstr(i + self.tetris_board_properties.top_padding, self.tetris_board_properties.left_padding + 1 + self.tetris_board_properties.board_width, '* ')
-                tetris_main_window.addstr(self.tetris_board_properties.board_depth + self.tetris_board_properties.top_padding, self.tetris_board_properties.left_padding, ("*" * (self.tetris_board_properties.board_width + 2)))
-            tetris_main_window.refresh()
-
-            if full_lines:
+            self.draw_points_and_figures(refreshed_tetris_objects=refreshed_tetris_objects, tetris_main_window=tetris_main_window)
+            if self.full_lines:
                 time.sleep(1)
-                for i in full_lines:
-                    before = self.tetris_board_properties.play_field[0:i]
-                    after = self.tetris_board_properties.play_field[i + 1:self.tetris_board_properties.board_width]
-                    self.tetris_board_properties.play_field = np.append(np.zeros((1, self.tetris_board_properties.board_width)), before, axis=0)
-                    self.tetris_board_properties.play_field = np.append(self.tetris_board_properties.play_field, after, axis=0)
-                    tetris_main_window.move(i + 5, 0)
-                    tetris_main_window.clrtoeol()
+                self.iterating_over_full_lines(tetris_main_window)
 
             pressed_key = tetris_main_window.getch()
             if pressed_key == 27 or pressed_key == 81 or pressed_key == 113:
@@ -90,6 +70,31 @@ class Tetris:
                     self.exit_game = True
                     break
                 tetris_main_window.refresh()
+
+    def iterating_over_full_lines(self, tetris_main_window):
+        for i in self.full_lines:
+            before = self.tetris_board_properties.play_field[0:i]
+            after = self.tetris_board_properties.play_field[i + 1:self.tetris_board_properties.board_width]
+            self.tetris_board_properties.play_field = np.append(np.zeros((1, self.tetris_board_properties.board_width)), before, axis=0)
+            self.tetris_board_properties.play_field = np.append(self.tetris_board_properties.play_field, after, axis=0)
+            tetris_main_window.move(i + 5, 0)
+            tetris_main_window.clrtoeol()
+
+    def draw_points_and_figures(self, refreshed_tetris_objects, tetris_main_window):
+        self.tetris_board_properties.overlay_of_play_field[refreshed_tetris_objects.position[0]:refreshed_tetris_objects.position[0] + refreshed_tetris_objects.random_figure.shape[0],
+        refreshed_tetris_objects.position[1]:refreshed_tetris_objects.position[1] + refreshed_tetris_objects.random_figure.shape[1]] = refreshed_tetris_objects.random_figure
+        for i in range(0, self.tetris_board_properties.board_depth):
+            if np.count_nonzero(self.tetris_board_properties.play_field[i]) == self.tetris_board_properties.board_width:
+                tetris_main_window.addstr(i + self.tetris_board_properties.top_padding, self.tetris_board_properties.left_padding - 3, ">>>>|" + ("*" * self.tetris_board_properties.board_width) + "|<<<<")
+                self.full_lines.append(i)
+            else:
+                tetris_main_window.addch(i + self.tetris_board_properties.top_padding, self.tetris_board_properties.left_padding, ord("*"))
+                for j in range(0, self.tetris_board_properties.board_width):
+                    tetris_main_window.addch(i + self.tetris_board_properties.top_padding, self.tetris_board_properties.left_padding + 1 + j,
+                                             ord('*') if self.tetris_board_properties.play_field[i, j] + self.tetris_board_properties.overlay_of_play_field[i, j] else ord(" "))
+                tetris_main_window.addstr(i + self.tetris_board_properties.top_padding, self.tetris_board_properties.left_padding + 1 + self.tetris_board_properties.board_width, '* ')
+            tetris_main_window.addstr(self.tetris_board_properties.board_depth + self.tetris_board_properties.top_padding, self.tetris_board_properties.left_padding, ("*" * (self.tetris_board_properties.board_width + 2)))
+        tetris_main_window.refresh()
 
     def detecting_pressed_key(self, **kwargs):
         refreshed_tetris_objects = kwargs['refreshed_tetris_objects']
