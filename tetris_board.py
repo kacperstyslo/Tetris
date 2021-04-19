@@ -5,7 +5,9 @@ from dataclasses import dataclass
 
 @dataclass
 class TetrisBoard:
-    """This class stores the properties of the playing field"""
+    """
+    This class stores the properties of the playing field.
+    """
     board_depth: int = 19
     board_width: int = 18
     top_padding: int = min(5, get_terminal_size().lines - board_depth - 5)

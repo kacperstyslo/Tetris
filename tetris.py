@@ -13,7 +13,9 @@ from tetris_move_figures import TetrisMoveFigures
 
 
 class Tetris:
-    """This class stores the main game logic"""
+    """
+    This class stores the main game logic.
+    """
 
     def __init__(self):
         self.tetris_board_properties = TetrisBoard()
@@ -32,7 +34,9 @@ class Tetris:
         quit()
 
     def main_tetris(self, tetris_main_window):
-        """Method with the main logic of the game"""
+        """
+        Method with the main logic of the game.
+        """
         tetris_main_window.clear()
         tetris_main_window.nodelay(1)
         curses.curs_set(0)
@@ -82,7 +86,9 @@ class Tetris:
             tetris_main_window.clrtoeol()
 
     def draw_points_and_figures(self, refreshed_tetris_objects, tetris_main_window):
-        """Drawing points and shape on the board"""
+        """
+        Drawing points and shape on the board.
+        """
         self.tetris_board_properties.overlay_of_play_field[refreshed_tetris_objects.position[0]:refreshed_tetris_objects.position[0] + refreshed_tetris_objects.random_figure.shape[0],
         refreshed_tetris_objects.position[1]:refreshed_tetris_objects.position[1] + refreshed_tetris_objects.random_figure.shape[1]] = refreshed_tetris_objects.random_figure
         for i in range(0, self.tetris_board_properties.board_depth):
@@ -99,7 +105,9 @@ class Tetris:
         tetris_main_window.refresh()
 
     def call_correct_method_for_figure_movement(self, **kwargs):
-        """When the user presses one of the figure control keys, this method will select the appropriate function"""
+        """
+        When the user presses one of the figure control keys, this method will select the appropriate function.
+        """
         refreshed_tetris_objects = kwargs['refreshed_tetris_objects']
         pressed_key = kwargs['pressed_key']
         if self.pressed_key_dict.get(pressed_key) == 'a' or self.pressed_key_dict.get(pressed_key) == 'A':
@@ -121,7 +129,9 @@ class Tetris:
         tetris_main_window.clrtoeol()
 
     def falling_objects(self, q: Queue):
-        """The method responsible for falling shapes"""
+        """
+        The method responsible for falling shapes.
+        """
         while True:
             if self.exit_game:
                 self.say_goodbye()

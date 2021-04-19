@@ -2,7 +2,9 @@ import numpy as np
 
 
 class TetrisMoveFigures:
-    """A class that contains all the methods responsible for moving figures"""
+    """
+    A class that contains all the methods responsible for moving figures.
+    """
 
     def __init__(self, board):
         self.tetris_board_properties = board
